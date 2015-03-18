@@ -1,0 +1,20 @@
+.text-align-center{
+    text-align: center;
+}
+
+.game-main-bg{
+    background: lightgray;
+    width: 500px;
+    margin: 0 auto;
+}
+
+.tiles{
+    list-style-type: none;
+    padding: 5px;
+}
+
+.tiles > li{
+    display: inline;
+    padding: 55px;
+    margin: 0;
+}

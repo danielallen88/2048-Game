@@ -1,1 +1,28 @@
-﻿
+﻿<html>
+<head>
+    <title>2048 Game</title>
+    <link rel="stylesheet" type="text/css" href="css/pure-min.css">
+    <link rel="stylesheet" type="text/css" href="css/2048-style.css">
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/knockout-3.3.0.js"></script>
+    <script type="text/javascript" src="js/2048-core.js"></script>
+</head>
+
+<body>
+<div class="pure-g">
+    <div class="pure-u-5-5 text-align-center">
+        <h2>2048 Game</h2>
+    </div>
+    <div class="pure-u-5-5 game-main-bg">
+        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(1) }"></ul>
+        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(2) }"></ul>
+        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(3) }"></ul>
+        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(4) }"></ul>
+    </div>
+</div>
+<script id="object" type="text/html">
+    <li data-bind="text: val, click: $parent.showThis;" class="text-align-center"></li>
+</script>
+</body>
+
+</html>

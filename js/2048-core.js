@@ -1,4 +1,9 @@
-//Preparing the default tile object form
+//Preparing the tile in 1 dimension array with object content
+//object.val and object.moved are observable so we can update the values on the fly
+//object.row represents the row of the object
+//object.col represents the column of the object
+//object.val is the value of the tile
+//object.moved is for us to check if the tile has been moved
 var objects = [
     {row: 1, col: 1, val: ko.observable(0), moved: ko.observable(false)},
     {row: 1, col: 2, val: ko.observable(0), moved: ko.observable(false)},
@@ -23,16 +28,16 @@ var _GameViewModel = function () {
     var self = this;
 
     //Create an observableArray
-    self.objects = objects;
-    self.tiles = ko.observableArray(self.objects);
+    self.tiles = ko.observableArray(objects);
 
+    //Return requested row from array for templating
     self.getByRow = function(row) {
         return ko.utils.arrayFilter(self.tiles(), function(item) {
             return (item.row === row);
         });
     };
 
-    //Return only the row we want
+    //Return only the row we want with sorted array
     self.filterByRow = function(row, sort) {
         var data = ko.utils.arrayFilter(self.tiles(), function(item) {
             return (item.row === row);
@@ -50,7 +55,7 @@ var _GameViewModel = function () {
         });
     };
 
-    //Return only the col we want
+    //Return only the col we want with sorted array
     self.filterByCol = function(col, sort) {
         var data = ko.utils.arrayFilter(self.tiles(), function(item) {
             return (item.col === col);
@@ -82,13 +87,19 @@ var _GameViewModel = function () {
 
     //Add number 2 in random tile once in empty tile only
     self.addTwo = function () {
-        var tiles = self.filteredTiles();
-        var num = self.randNum(tiles.length);
+        self.checkTiles(); //Check for winning tile
+        var tiles = self.filteredTiles(); //Return only empty tiles
 
-        tiles[num].val(2).moved(false);
+        if (tiles.length) { //Check if there is any empty tiles to add
+            var num = self.randNum(tiles.length);
+            tiles[num].val(2).moved(false);
+        }
+        else {
+            alert('No more moves, you lose !!!');
+        }
     };
 
-    //New game
+    //New game will fire by default onload, if new game button is clicked it will fire again
     self.newGame = function() {
         var notEmpty = ko.utils.arrayFilter(self.tiles(), function(item) {
             return (item.val() !== 0);
@@ -100,6 +111,17 @@ var _GameViewModel = function () {
 
         self.addTwo();
         self.addTwo();
+    };
+
+    //Check if any tiles has 2048, if available then alert winning message
+    self.checkTiles = function() {
+        var win = ko.utils.arrayFilter(self.tiles(), function(item) {
+            return (item.val() === 2048);
+        });
+
+        if (win.length > 0) {
+            alert('Congratulation, you\'ve beat the game !!!');
+        }
     };
 
     //Game logic to move tiles
@@ -171,6 +193,7 @@ $(function(){
     //Sort ko.observableArray self.tiles in ASC order
     $(document).sortTiles();
 
+    //Keyboard mapping to game logic
     $(document).on( "keydown", function( event ) {
         switch( event.which ) {
             case 87: //Keypress "W" for Up

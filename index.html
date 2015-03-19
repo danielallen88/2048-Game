@@ -4,25 +4,57 @@
     <link rel="stylesheet" type="text/css" href="css/pure-min.css">
     <link rel="stylesheet" type="text/css" href="css/2048-style.css">
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/knockout-3.3.0.js"></script>
     <script type="text/javascript" src="js/2048-core.js"></script>
 </head>
 
 <body>
-<div class="pure-g">
-    <div class="pure-u-5-5 text-align-center">
-        <h2>2048 Game</h2>
-    </div>
-    <div class="pure-u-5-5 game-main-bg">
-        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(1) }"></ul>
-        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(2) }"></ul>
-        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(3) }"></ul>
-        <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: filterByRow(4) }"></ul>
+<div class="pure-g block-center">
+    <div class="pure-u-1-1 game-main-bg border-radius">
+        <div class="pure-g">
+            <div class="pure-u-1-2">
+                <h1>2048 Game</h1>
+            </div>
+            <div class="pure-u-1-2 text-align-right">
+                <input type="button" name="newGame" id="newGame" value="New Game" class="pure-input-rounded pure-button-primary pure-button" data-bind="click: $root.newGame();">
+            </div>
+        </div>
+        <div class="pure-u-1-1">
+            <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: getByRow(1)}"></ul>
+            <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: getByRow(2)}"></ul>
+            <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: getByRow(3)}"></ul>
+            <ul class="firstRow tiles" data-bind="template: { name: 'object', foreach: getByRow(4)}"></ul>
+        </div>
+        <div class="pure-u-1-1 instruction">
+            <h4>Instruction</h4>
+            <ul>
+                <li>W - Press "W" on your keyboard to move tile up</li>
+                <li>S - Press "S" on your keyboard to move tile down</li>
+                <li>A - Press "A" on your keyboard to move tile left</li>
+                <li>D - Press "D" on your keyboard to move tile right</li>
+                <li>Combine tiles to get 2048 in a single tile to win</li>
+            </ul>
+        </div>
     </div>
 </div>
 <script id="object" type="text/html">
-    <li data-bind="text: val, click: $parent.showThis;" class="text-align-center"></li>
+    <!-- ko if: val -->
+        <!-- ko if: moved -->
+        <li data-bind="click: $parent.showThis;" class="text-align-center lightyellow border-radius">
+            <span data-bind="text: val() > 0 ? val() : ''"></span>
+        </li>
+        <!-- /ko -->
+        <!-- ko ifnot: moved -->
+        <li data-bind="click: $parent.showThis;" class="text-align-center lightblue border-radius">
+            <span data-bind="text: val() > 0 ? val() : ''"></span>
+        </li>
+        <!-- /ko -->
+    <!-- /ko -->
+    <!-- ko ifnot: val -->
+    <li data-bind="click: $parent.showThis;" class="text-align-center white border-radius">
+        <span data-bind="text: val() > 0 ? val() : ''"></span>
+    </li>
+    <!-- /ko -->
 </script>
 </body>
 
